@@ -9,5 +9,9 @@ This should highlight the application keys requirements including dependencies(r
 - Spring Cloud 2024.0.0
 - Spring Boot 3.4.0
 
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![alt text](https://raw.githubusercontent.com/samwanjo41/sw-batch-processing/refs/heads/master/intro-lesson-billing-job.svg)
+
+
 
 
