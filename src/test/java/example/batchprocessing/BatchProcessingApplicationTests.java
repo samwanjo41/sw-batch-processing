@@ -14,6 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 @SpringBatchTest
 @SpringBootTest
 @ExtendWith(OutputCaptureExtension.class)
@@ -27,27 +30,23 @@ class BatchProcessingApplicationTests {
 
 	@BeforeEach
 	public void setUp() {
-		this.jobRepositoryTestUtils.removeJobExecutions();
-	}
+		this.jobRepositoryTestUtils.removeJobExecutions();	}
 
 
 
 	@Test
-	void testJobExecution(CapturedOutput output) throws Exception {
-
+	void testJobExecution() throws Exception {
 		// given
-		JobParameters jobParameters = this.jobLauncherTestUtils.getUniqueJobParametersBuilder()
-				.addString("input.file", "/some/input/file")
-				.addString("file.format", "csv", false)
+		JobParameters jobParameters = new JobParametersBuilder()
+				.addString("input.file", "src/main/resources/billing-2023-01.csv")
 				.toJobParameters();
 
 		// when
 		JobExecution jobExecution = this.jobLauncherTestUtils.launchJob(jobParameters);
 
-
 		// then
-		Assertions.assertTrue(output.getOut().contains("processing billing information from file /some/input/file"));
-		Assertions.assertEquals(ExitStatus.COMPLETED.addExitDescription("processing success"), jobExecution.getExitStatus());
+		Assertions.assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
+		Assertions.assertTrue(Files.exists(Paths.get("staging", "billing-2023-01.csv")));
 	}
 
 }
